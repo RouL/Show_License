@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "http://www.woltlab.com/DTDs/language.dtd">
+<language languagecode="de">
+	<category name="wcf.acp.package">
+		<item name="wcf.acp.package.step.install.ShowLicensePackageInstallationPlugin"><![CDATA[Zeige Lizenz an ...]]></item>
+		<item name="wcf.acp.package.step.uninstall.ShowLicensePackageInstallationPlugin"><![CDATA[Entferne Lizenztexte ...]]></item>
+		<item name="wcf.acp.package.licensetext"><![CDATA[Lizenzbestimmungen]]></item>
+		<item name="wcf.acp.package.licensetext.accept.description"><![CDATA[Akzeptieren Sie sämtliche Bedingungen der Lizenzbestimmungen? Sie können die Software nur installieren, wenn Sie die Lizenzbestimmungen akzeptieren.]]></item>
+		<item name="wcf.acp.package.licensetext.description"><![CDATA[Das Paket ist an folgende Lizenzbestimmungen geknüpft. Verwenden Sie die Bildlaufleiste, um das gesamte Dokument anzuzeigen.]]></item>
+		<item name="wcf.acp.package.licensetext.error.missingacception"><![CDATA[Um mit der Installation fortfahren zu können, müssen Sie die Lizenbestimmungen akzeptieren.]]></item>
+		<item name="wcf.acp.package.licensetext.install.description"><![CDATA[Bitte lesen Sie die folgenden Lizenzbestimmungen. Verwenden Sie die Bildlaufleiste, um das gesamte Dokument anzuzeigen.]]></item>
+		<item name="wcf.acp.package.view.button.showlicensetext"><![CDATA[Lizenzbedingungen anzeigen]]></item>
+	</category>
+</language>
