@@ -4,7 +4,7 @@
 	<packageinformation>
 		<packagename>Show License</packagename>
 		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
-		<unique>1</unique>
+		<isunique>1</isunique>
 		<version>1.0.0</version>
 		<date>2008-07-07</date>
 		<plugin>com.woltlab.wcf</plugin>
