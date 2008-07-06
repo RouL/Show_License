@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE package SYSTEM "http://www.woltlab.com/DTDs/package.dtd">
-<package name="com.woltlabb.community.roul.pip.showlicense">
+<package name="com.woltlab.community.roul.pip.showlicense">
 	<packageinformation>
 		<packagename>Show License</packagename>
 		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
