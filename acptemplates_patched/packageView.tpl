@@ -37,7 +37,7 @@
 	{if $package->getUrl() != ''}
 		<div class="formElement">
 			<p class="formFieldLabel">{lang}wcf.acp.package.view.url{/lang}</p>
-			<p class="formField"><a href="{@RELATIVE_WCF_DIR}acp/dereferrer.php?url={$package->url|rawurlencode}" class="externalURL">{$package->getUrl()}</a></p>
+			<p class="formField"><a href="{@RELATIVE_WCF_DIR}acp/dereferrer.php?url={$package->getUrl()|rawurlencode}" class="externalURL">{$package->getUrl()}</a></p>
 		</div>
 	{/if}
 	{if $package->getParentPackageID()}
@@ -50,7 +50,7 @@
 		<p class="formFieldLabel">{lang}wcf.acp.package.view.author{/lang}</p>
 		<p class="formField">{if $package->getAuthorURL()}<a href="{@RELATIVE_WCF_DIR}acp/dereferrer.php?url={$package->getAuthorURL()|rawurlencode}" class="externalURL">{$package->getAuthor()}</a>{else}{$package->getAuthor()}{/if}</p>
 	</div>
-
+	
 	{if $additionalFields|isset}{@$additionalFields}{/if}
 </fieldset>
 
@@ -94,7 +94,7 @@
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.author{/lang}</span></div></th>
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.version{/lang}</span></div></th>
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.date{/lang}</span></div></th>
-
+					
 					{if $additionalColumns|isset}{@$additionalColumns}{/if}
 				</tr>
 			</thead>
@@ -112,7 +112,7 @@
 						{else}
 							<img src="{@RELATIVE_WCF_DIR}icon/deleteDisabledS.png" alt="" title="{lang}wcf.acp.package.view.button.uninstall{/lang}" />
 						{/if}
-
+						
 						{if $package.additionalButtons|isset}{@$package.additionalButtons}{/if}
 					</td>
 					<td class="columnID">{@$package.packageID}</td>
@@ -129,14 +129,14 @@
 					<td class="columnText">{if $package.authorURL}<a href="{@RELATIVE_WCF_DIR}acp/dereferrer.php?url={$package.authorURL|rawurlencode}" class="externalURL">{$package.author}</a>{else}{$package.author}{/if}</td>
 					<td class="columnText">{$package.packageVersion}</td>
 					<td class="columnDate">{@$package.packageDate|date}</td>
-
+					
 					{if $package.additionalColumns|isset}{@$package.additionalColumns}{/if}
 				</tr>
 			{/foreach}
 			</tbody>
 		</table>
 	</div>
-
+	
 	<script type="text/javascript">
 		//<![CDATA[
 		initList('requiredPackages', 0);
@@ -163,7 +163,7 @@
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.author{/lang}</span></div></th>
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.version{/lang}</span></div></th>
 					<th><div><span class="emptyHead">{lang}wcf.acp.package.list.date{/lang}</span></div></th>
-
+					
 					{if $additionalColumns|isset}{@$additionalColumns}{/if}
 				</tr>
 			</thead>
@@ -181,7 +181,7 @@
 						{else}
 							<img src="{@RELATIVE_WCF_DIR}icon/deleteDisabledS.png" alt="" title="{lang}wcf.acp.package.view.button.uninstall{/lang}" />
 						{/if}
-
+						
 						{if $package.additionalButtons|isset}{@$package.additionalButtons}{/if}
 					</td>
 					<td class="columnID">{@$package.packageID}</td>
@@ -198,14 +198,14 @@
 					<td class="columnText">{if $package.authorURL}<a href="{@RELATIVE_WCF_DIR}acp/dereferrer.php?url={$package.authorURL|rawurlencode}" class="externalURL">{$package.author}</a>{else}{$package.author}{/if}</td>
 					<td class="columnText">{$package.packageVersion}</td>
 					<td class="columnDate">{@$package.packageDate|date}</td>
-
+					
 					{if $package.additionalColumns|isset}{@$package.additionalColumns}{/if}
 				</tr>
 			{/foreach}
 			</tbody>
 		</table>
 	</div>
-
+	
 	<script type="text/javascript">
 		//<![CDATA[
 		initList('dependentPackages', 0);

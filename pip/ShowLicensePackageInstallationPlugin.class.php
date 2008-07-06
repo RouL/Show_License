@@ -1,85 +1,77 @@
 <?php
 require_once(WCF_DIR.'lib/acp/package/plugin/AbstractPackageInstallationPlugin.class.php');
 require_once(WCF_DIR.'lib/system/language/Language.class.php');
-//require_once(WCF_DIR.'lib/system/exception/wBB3ModsSystemException.class.php');
 
 /**
  * This PIP shows a licensetext for the plugin.
  *
- * @author	Markus Bartz <roul@black-storm.org>
- * @package	de.wbb3mods.wcf.pip.showlicense
+ * @package	org.black-storm.pip.showlicense
+ * @author	Markus Bartz
+ * @copyright	2007-2008 Blackstorm
+ * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPlugin {
 	public $tagName = 'licensetexts';
 	public $tableName = 'package_installation_licensetext';
-	public $installedLanguages = array();
 	public $licenseTexts = array();
-	public $licenseShowLang = 0;
+	
+	public $defaultLanguage = '';
+	public $installedLanguages = array();
 
 	/**
 	 * @see	 PackageInstallationPlugin::install()
 	 */
 	public function install() {
 		$instructions = $this->installation->getInstructions();
-		$licensetxtfiles = $instructions[$this->tagName];
+		$licenseTextFiles = $instructions[$this->tagName];
 
 		$this->loadInstalledLanguages();
-		$userLanguage = WCFACP::getUser()->languageID;
-		$availableTexts = array();
-		foreach ($licensetxtfiles as $licensetxtfile) {
-			if ($licensetext = $this->readLicenseText($licensetxtfile)) {
+		foreach ($licenseTextFiles as $licenseTextFile) {
+			if ($licenseText = $this->readLicenseText($licenseTextFile)) {
 				// check required attributes
-				if (!isset($licensetxtfile['languagecode'])) {
-					//throw new wBB3ModsSystemException("required 'languagecode' attribute for 'licensetexts' tag is missing in '".PackageArchive::INFO_FILE."'", 10001);
-					throw new SystemException("required 'languagecode' attribute for 'licensetexts' tag is missing in '".PackageArchive::INFO_FILE."'", 0);
+				if (!isset($licenseTextFile['languagecode'])) {
+					throw new SystemException("required 'languagecode' attribute for 'licensetexts' tag is missing in '".PackageArchive::INFO_FILE."'");
 				}
 				// check language encoding
-				if (!Language::isSupported($licensetxtfile['languagecode'])) {
+				if (!Language::isSupported($licenseTextFile['languagecode'])) {
 					// unsupported encoding
 					continue;
 				}
-
-				if ($licensetxtfile['languagecode'] == WCFACP::getLanguage()->getLanguageCode()) $this->licenseShowLang = WCFACP::getLanguage()->getLanguageID();
-				$availableTexts[$licensetxtfile['languagecode']] = $licensetext;
+				
+				$default = 0;
+				if (isset($licenseTextFile['default'])) $default = $licenseTextFile['default'];
+				
+				if (array_key_exists($licenseTextFile['languagecode'], $this->installedLanguages)) {
+					$this->licenseTexts[$licenseTextFile['languagecode']] = array(
+						'languageID' => $this->installedLanguages[$licenseTextFile['languagecode']],
+						'licenseText' => $licenseText
+					);
+					if ($default == 1) $this->defaultLanguage = $licenseTextFile['languagecode'];
+				}
 			}
 		}
 
-		if (count($availableTexts) < 1) {
-			//throw new wBB3ModsSystemException("no license informations in you supported languages available in '".PackageArchive::INFO_FILE."'", 10002);
-			throw new SystemException("no license informations in you supported languages available in '".PackageArchive::INFO_FILE."'", 0);
+		if (count($this->licenseTexts) < 1) {
+			throw new SystemException("no license informations in your supported languages available in '".PackageArchive::INFO_FILE."'", 0);
 		}
-
-
-		$fallback = 0;
-		foreach ($availableTexts as $languageCode => $licensetext) {
-
-			if (array_key_exists($languageCode, $this->installedLanguages)) {
-				if ($fallback == 0) $fallback = $this->installedLanguages[$languageCode];
-				if ($languageCode == 'en') $fallback = $this->installedLanguages[$languageCode];
-				if ($this->licenseShowLang == 0 &&
-					WCFACP::getLanguage()->getLanguageID() != Language::getDefaultLanguageID() &&
-					$this->installedLanguages[$languageCode] == Language::getDefaultLanguageID()
-				) $this->licenseShowLang = $this->installedLanguages[$languageCode];
-				$this->licenseTexts[$this->installedLanguages[$languageCode]] = $licensetext;
-			}
-		}
-
-		if ($this->licenseShowLang == 0) {
-			if ($fallback != 0) $this->licenseShowLang = $fallback;
-			else {
-				reset($availableTexts);
-				$this->licenseTexts[Language::getDefaultLanguageID()] = current($availableTexts);
-				$this->licenseShowLang = Language::getDefaultLanguageID();
-			}
+		
+		if ($this->defaultLanguage == '') {
+			if (isset($this->licenseTexts[WCF::getLanguage()->getLanguageCode()])) $this->defaultLanguage = WCF::getLanguage()->getLanguageCode();
+			if ($this->defaultLanguage == '' && WCF::getLanguage()->getLanguageCode() == 'de-informal' && isset($this->licenseTexts['de'])) $this->defaultLanguage = 'de'; 
+			if (isset($this->licenseTexts['en'])) $this->defaultLanguage = 'en';
 		}
 
 		$this->promptLicenseConfirmation();
 
 		$itemInserts = '';
-		foreach ($this->licenseTexts as $languageID => $licensetext) {
-
+		foreach ($this->licenseTexts as $languageCode => $licenseData) {
 			if (!empty($itemInserts)) $itemInserts .= ',';
-			$itemInserts .= "(".$this->installation->getPackageID().",".$languageID.",'".escapeString($licensetext)."')";
+			$itemInserts .= "(
+				".intval($this->installation->getPackageID()).",
+				".intval($licenseData['languageID']).",
+				".(($this->defaultLanguage == $languageCode) ? (1) : (0)).",
+				'".escapeString($licenseData['licenseText'])."'
+			)";
 		}
 		$sql = "INSERT INTO wcf".WCF_N."_".$this->tableName."
 			VALUES ".$itemInserts;
@@ -99,41 +91,41 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 	public function update() {}
 
 	/**
-	 * @see	 PackageInstallationPlugin::hasUninstall()
-	 */
-	public function hasUninstall() {
-		if (parent::hasUninstall()) return true;
-		return false;
-	}
-
-	/**
-	 * @see	 PackageInstallationPlugin::uninstall()
-	 */
-	public function uninstall() {
-		$sql = "DELETE FROM	wcf".WCF_N."_".$this->tableName."
-			WHERE		packageID = ".$this->installation->getPackageID();
-		WCF::getDB()->sendQuery($sql);
-	}
-
-	/**
 	 * Prompts for license confirmation
 	 *
-	 * @return	bool						accepted
+	 * @return	bool
 	 */
 	protected function promptLicenseConfirmation() {
 		$errorType = '';
+		$languageCode = $this->defaultLanguage;
+		if (isset($this->licenseTexts[WCF::getLanguage()->getLanguageCode()])) $languageCode = WCF::getLanguage()->getLanguageCode();
+		if (WCF::getLanguage()->getLanguageCode() == 'de-informal' && $languageCode != 'de-informal' && isset($this->licenseTexts['de'])) $languageCode = 'de';
+		 
 		if (isset($_POST['send'])) {
-			if (isset($_POST['licenseAccepted'])) {
-				if (intval(StringUtil::trim($_POST['licenseAccepted'])) == 1) return true;
+			if (isset($_POST['languageCode'])) {
+				if (array_key_exists($_POST['languageCode'], $this->licenseTexts)) $languageCode = $_POST['languageCode']; 
 			}
-			$errorType = 'missingAcception';
+			if (!isset($_POST['langChooser'])) {
+				if (isset($_POST['licenseAccepted'])) {
+					if (intval(StringUtil::trim($_POST['licenseAccepted'])) == 1) return true;
+				}
+				$errorType = 'missingAcception';
+			}
 		}
 
-		$licenseText = $this->licenseTexts[$this->licenseShowLang];
+		$availableLanguages = array();
+		foreach ($this->licenseTexts as $langCode => $value) {
+			if ($languageCode == '') $languageCode = $langCode;
+			$availableLanguages[$langCode] = WCF::getLanguage()->get('wcf.global.language.'.$langCode).' ('.$langCode.')';
+		}
+		
+		$licenseText = $this->licenseTexts[$languageCode]['licenseText'];
 		if (CHARSET != 'UTF-8') $licenseText = StringUtil::convertEncoding('UTF-8', CHARSET, $licenseText);
 
 		WCF::getTPL()->assign(array(
 			'licenseText' => $licenseText,
+			'languageCode' => $languageCode,
+			'availableLanguages' => $availableLanguages,
 			'errorType' => $errorType
 		));
 		WCF::getTPL()->display('packageInstallationShowLicenseText');
@@ -166,7 +158,6 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 		// search licensetext files in package archive
 		// throw error message if not found
 		if (($fileIndex = $this->installation->getArchive()->getTar()->getIndexByFilename($licensetxtfile['cdata'])) === false) {
-			//throw new wBB3ModsSystemException("license text file '".($licensetxtfile['cdata'])."' not found.", 10003);
 			throw new SystemException("license text file '".($licensetxtfile['cdata'])."' not found.", 0);
 		}
 

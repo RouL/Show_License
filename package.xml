@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE package SYSTEM "http://www.woltlab.com/DTDs/package.dtd">
-<package name="de.wbb3mods.wcf.pip.showlicense">
+<package name="com.woltlabb.community.roul.pip.showlicense">
 	<packageinformation>
 		<packagename>Show License</packagename>
-		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages</packagedescription>
+		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
 		<unique>1</unique>
-		<version>1.0.0 Beta 1</version>
-		<date>2008-07-02</date>
+		<version>1.0.0</version>
+		<date>2008-07-07</date>
 		<plugin>com.woltlab.wcf</plugin>
+		<unique>1</unique>
 	</packageinformation>
 	
 	<authorinformation>
@@ -22,6 +23,7 @@
 	<instructions type="install">
 		<files>files.tar</files>
 		<languages languagecode="de">de.xml</languages>
+		<languages languagecode="de-informal">de-informal.xml</languages>
 		<languages languagecode="en">en.xml</languages>
 		<sql>install.sql</sql>
 		<eventlistener>eventlistener.xml</eventlistener>

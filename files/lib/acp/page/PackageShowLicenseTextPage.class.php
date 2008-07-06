@@ -10,10 +10,12 @@ require_once(WCF_DIR.'lib/acp/package/Package.class.php');
  */
 class PackageShowLicenseTextPage extends AbstractPage {
 	public $package;
-	public $packageID = 0;
+	public $activePackageID = 0;
 	public $templateName = 'packageShowLicenseText';
-	public $licenseTexts = '';
-	public $licenseShowLang = 0;
+	public $licenseTexts = array();
+	public $languageCode = '';
+	public $availableLanguages = array();
+	public $defaultLanguage = '';
 
 	/**
 	 * @see Page::readParameters()
@@ -21,7 +23,8 @@ class PackageShowLicenseTextPage extends AbstractPage {
 	public function readParameters() {
 		parent::readParameters();
 
-		if (isset($_REQUEST['activePackageID'])) $this->packageID = intval($_REQUEST['activePackageID']);
+		if (isset($_REQUEST['activePackageID'])) $this->activePackageID = intval($_REQUEST['activePackageID']);
+		if (isset($_REQUEST['languageCode'])) $this->languageCode = StringUtil::trim($_REQUEST['languageCode']);
 	}
 
 	/**
@@ -32,21 +35,30 @@ class PackageShowLicenseTextPage extends AbstractPage {
 
 		// get package data and licensetexts
 		try {
-			$this->package = new Package($this->packageID);
-			$sql = "SELECT		languageID,licenseText
+			$this->package = new Package($this->activePackageID);
+			$sql = "SELECT		*
 				FROM		wcf".WCF_N."_package_installation_licensetext
-				WHERE		packageID = ".$this->packageID;
+				WHERE		packageID = ".$this->activePackageID;
 			WCF::getDB()->sendQuery($sql);
 			if (WCF::getDB()->countRows() < 1) throw new SystemException();
-			while ($licensetxt = WCF::getDB()->fetchArray()) {
-				$this->licenseTexts[$licensetxt['languageID']] = $licensetxt['licenseText'];
+			while ($licenseText = WCF::getDB()->fetchArray()) {
+				$language = WCF::getLanguage()->getLanguage($licenseText['languageID']);
+				$this->licenseTexts[$language['languageCode']] = $licenseText['licenseText'];
+				if ($licenseText['defaultLang']) $this->defaultLanguage = $language['languageCode'];
 			}
-			if (isset($this->licenseTexts[WCFACP::getLanguage()->getLanguageID()])) $this->licenseShowLang = WCFACP::getLanguage()->getLanguageID();
-			elseif (isset($this->licenseTexts[Language::getDefaultLanguageID()])) $this->licenseShowLang = Language::getDefaultLanguageID();
-			else {
-				$licenseLanguageIDs = array_keys($this->licenseTexts);
-				$this->licenseShowLang = $licenseLanguageIDs[0];
+			
+			$languageCode = $this->defaultLanguage;
+			if (isset($this->licenseTexts[WCF::getLanguage()->getLanguageCode()])) $languageCode = WCF::getLanguage()->getLanguageCode();
+			if (WCF::getLanguage()->getLanguageCode() == 'de-informal' && $languageCode != 'de-informal' && isset($this->licenseTexts['de'])) $languageCode = 'de';
+			
+			$this->availableLanguages = array();
+			foreach ($this->licenseTexts as $langCode => $value) {
+				if ($languageCode == '') $languageCode = $langCode;
+				$this->availableLanguages[$langCode] = WCF::getLanguage()->get('wcf.global.language.'.$langCode).' ('.$langCode.')';
 			}
+			
+			if ($this->languageCode == '') $this->languageCode = $languageCode;
+			
 		}
 		catch (SystemException $e) {
 			require_once(WCF_DIR.'lib/system/exception/IllegalLinkException.class.php');
@@ -61,7 +73,9 @@ class PackageShowLicenseTextPage extends AbstractPage {
 		parent::assignVariables();
 
 		WCF::getTPL()->assign(array(
-			'licenseText' => $this->licenseTexts[$this->licenseShowLang],
+			'languageCode' => $this->languageCode,
+			'availableLanguages' => $this->availableLanguages,
+			'licenseText' => $this->licenseTexts[$this->languageCode],
 			'package' => $this->package
 		));
 	}

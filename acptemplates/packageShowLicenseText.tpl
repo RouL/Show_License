@@ -10,8 +10,21 @@
 
 <fieldset>
 	<legend>{lang}wcf.acp.package.licensetext{/lang}</legend>
+	<form method="get" name="chooseLanguage" id="chooseLanguage" style="text-align: right;" action="index.php">
+		<input type="hidden" name="page" value="PackageShowLicenseText" />
+		<label for="languageCode" style="display: inline;">{lang}wcf.acp.package.licensetext.chooseLanguage{/lang}</label>
+		{htmlOptions name="languageCode" id="languageCode" options=$availableLanguages selected=$languageCode disableEncoding=true}
+		<input type="hidden" name="activePackageID" value="{@$package->getPackageID()}" />
+		<input type="hidden" name="packageID" value="{@PACKAGE_ID}" />
+			{@SID_INPUT_TAG}
+	</form>
+	<script type="text/javascript">
+		//<![CDATA[
+		document.getElementById('languageCode').onchange = function() { document.getElementById('chooseLanguage').submit(); };
+		//]]>
+	</script>
 	<div class="formElement">{lang}wcf.acp.package.licensetext.description{/lang}</div>
-	<textarea rows="20" cols="40" style="width: 100%" readonly="readonly">{$licenseText}</textarea>
+	<textarea rows="20" cols="40" readonly="readonly">{$licenseText}</textarea>
 </fieldset>
 
 <div class="formSubmit">
