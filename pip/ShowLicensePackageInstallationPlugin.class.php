@@ -23,7 +23,8 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 	 */
 	public function install() {
 		$instructions = $this->installation->getInstructions();
-		$licenseTextFiles = $instructions[$this->tagName];
+		if(isset($instructions[$this->tagName]['cdata'])) $licenseTextFiles = array($instructions[$this->tagName]);
+		else $licenseTextFiles = $instructions[$this->tagName];
 
 		$this->loadInstalledLanguages();
 		foreach ($licenseTextFiles as $licenseTextFile) {

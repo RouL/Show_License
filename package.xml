@@ -5,8 +5,8 @@
 		<packagename>Show License</packagename>
 		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
 		<isunique>1</isunique>
-		<version>1.0.0</version>
-		<date>2008-07-07</date>
+		<version>1.0.1</version>
+		<date>2008-07-18</date>
 		<plugin>com.woltlab.wcf</plugin>
 		<unique>1</unique>
 	</packageinformation>
@@ -30,5 +30,8 @@
 		<packageinstallationplugins>pip.tar</packageinstallationplugins>
 		<acptemplates>acptemplates.tar</acptemplates>
 		<acptemplatepatch>acptemplates.diff</acptemplatepatch>
+	</instructions>
+	<instructions type="update" fromversion="1.0.0">
+		<packageinstallationplugins>pip.tar</packageinstallationplugins>
 	</instructions>
 </package>
