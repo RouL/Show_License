@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE package SYSTEM "http://www.woltlab.com/DTDs/package.dtd">
+<package name="com.woltlab.community.roul.pip.showlicense">
+	<packageinformation>
+		<packagename>Show License</packagename>
+		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
+		<isunique>1</isunique>
+		<version>1.0.1</version>
+		<date>2008-07-18</date>
+		<plugin>com.woltlab.wcf</plugin>
+		<unique>1</unique>
+	</packageinformation>
+	
+	<authorinformation>
+		<author>RouL</author>
+		<authorURL>http://community.woltlab.com/db/index.php?page=User&amp;userID=18184</authorURL>
+	</authorinformation>
+	
+	<requiredpackages>
+		<requiredPackage minversion="1.0.7">com.woltlab.wcf</requiredPackage>
+	</requiredpackages>
+	
+	<instructions type="install">
+		<files>files.tar</files>
+		<languages languagecode="de">de.xml</languages>
+		<languages languagecode="de-informal">de-informal.xml</languages>
+		<languages languagecode="en">en.xml</languages>
+		<sql>install.sql</sql>
+		<eventlistener>eventlistener.xml</eventlistener>
+		<packageinstallationplugins>pip.tar</packageinstallationplugins>
+		<acptemplates>acptemplates.tar</acptemplates>
+		<acptemplatepatch>acptemplates.diff</acptemplatepatch>
+	</instructions>
+	<instructions type="update" fromversion="1.0.0">
+		<packageinstallationplugins>pip.tar</packageinstallationplugins>
+	</instructions>
+</package>
