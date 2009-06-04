@@ -5,10 +5,12 @@ require_once(WCF_DIR.'lib/system/language/Language.class.php');
 /**
  * This PIP shows a licensetext for the plugin.
  *
- * @package	org.black-storm.pip.showlicense
- * @author	Markus Bartz
- * @copyright	2007-2008 Blackstorm
- * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @author		Markus Bartz <roul@codingcorner.info>
+ * @copyright	2009 RouLs Coding Corner
+ * @license		GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.html>
+ * @package		com.woltlab.community.roul.pip.showlicense
+ * @subpackage	acp.package.plugin
+ * @category 	Show License
  */
 class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPlugin {
 	public $tagName = 'licensetexts';

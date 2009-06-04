@@ -5,8 +5,12 @@ require_once(WCF_DIR.'lib/acp/package/Package.class.php');
 /**
  * Shows the licensetext of a package
  *
- * @author	Markus Bartz <roul@black-storm.org>
- * @package	de.wbb3mods.wcf.pip.showlicense
+ * @author		Markus Bartz <roul@codingcorner.info>
+ * @copyright	2009 RouLs Coding Corner
+ * @license		GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.html>
+ * @package		com.woltlab.community.roul.pip.showlicense
+ * @subpackage	acp.page
+ * @category 	Show License
  */
 class PackageShowLicenseTextPage extends AbstractPage {
 	public $package;
