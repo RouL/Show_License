@@ -5,19 +5,19 @@
 		<packagename>Show License</packagename>
 		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
 		<isunique>1</isunique>
-		<version>1.0.1</version>
-		<date>2008-07-18</date>
+		<version>1.0.2</version>
+		<date>2008-08-06</date>
 		<plugin>com.woltlab.wcf</plugin>
 		<unique>1</unique>
 	</packageinformation>
 	
 	<authorinformation>
-		<author>RouL</author>
-		<authorURL>http://community.woltlab.com/db/index.php?page=User&amp;userID=18184</authorURL>
+		<author>Coding Corner</author>
+		<authorurl>http://codingcorner.info/</authorurl>
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredPackage minversion="1.0.7">com.woltlab.wcf</requiredPackage>
+		<requiredPackage minversion="1.0.11 pl 1">com.woltlab.wcf</requiredPackage>
 	</requiredpackages>
 	
 	<instructions type="install">
@@ -31,7 +31,13 @@
 		<acptemplates>acptemplates.tar</acptemplates>
 		<acptemplatepatch>acptemplates.diff</acptemplatepatch>
 	</instructions>
+
 	<instructions type="update" fromversion="1.0.0">
 		<packageinstallationplugins>pip.tar</packageinstallationplugins>
+		<acptemplatepatch>acptemplates.diff</acptemplatepatch>
+	</instructions>
+
+	<instructions type="update" fromversion="1.0.1">
+		<acptemplatepatch>acptemplates.diff</acptemplatepatch>
 	</instructions>
 </package>
