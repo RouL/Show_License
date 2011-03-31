@@ -6,7 +6,7 @@ require_once(WCF_DIR.'lib/acp/package/Package.class.php');
  * Shows the licensetext of a package
  *
  * @author		Markus Bartz <roul@codingcorner.info>
- * @copyright	2009 RouLs Coding Corner
+ * @copyright	2011 Markus Bartz
  * @license		GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.html>
  * @package		com.woltlab.community.roul.pip.showlicense
  * @subpackage	acp.page
@@ -40,9 +40,9 @@ class PackageShowLicenseTextPage extends AbstractPage {
 		// get package data and licensetexts
 		try {
 			$this->package = new Package($this->activePackageID);
-			$sql = "SELECT		*
-				FROM		wcf".WCF_N."_package_installation_licensetext
-				WHERE		packageID = ".$this->activePackageID;
+			$sql = "SELECT	*
+				FROM	wcf".WCF_N."_package_installation_licensetext
+				WHERE	packageID = ".$this->activePackageID;
 			WCF::getDB()->sendQuery($sql);
 			if (WCF::getDB()->countRows() < 1) throw new SystemException();
 			while ($licenseText = WCF::getDB()->fetchArray()) {

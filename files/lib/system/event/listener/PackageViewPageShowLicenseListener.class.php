@@ -6,7 +6,7 @@ require_once(WCF_DIR.'lib/system/style/StyleManager.class.php');
  * Shows a ShowLicense Button on PackageViewPage if necessary.
  *
  * @author		Markus Bartz <roul@codingcorner.info>
- * @copyright	2009 RouLs Coding Corner
+ * @copyright	2011 Markus Bartz
  * @license		GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.html>
  * @package		com.woltlab.community.roul.pip.showlicense
  * @subpackage	system.event.listener
