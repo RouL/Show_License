@@ -19,15 +19,15 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 	
 	public $defaultLanguage = '';
 	public $installedLanguages = array();
-
+	
 	/**
-	 * @see	 PackageInstallationPlugin::install()
+	 * @see	PackageInstallationPlugin::install()
 	 */
 	public function install() {
 		$instructions = $this->installation->getInstructions();
 		if(isset($instructions[$this->tagName]['cdata'])) $licenseTextFiles = array($instructions[$this->tagName]);
 		else $licenseTextFiles = $instructions[$this->tagName];
-
+		
 		$this->loadInstalledLanguages();
 		foreach ($licenseTextFiles as $licenseTextFile) {
 			if ($licenseText = $this->readLicenseText($licenseTextFile)) {
@@ -53,7 +53,7 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 				}
 			}
 		}
-
+		
 		if (count($this->licenseTexts) < 1) {
 			throw new SystemException("no license informations in your supported languages available in '".PackageArchive::INFO_FILE."'", 0);
 		}
@@ -63,9 +63,9 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 			if ($this->defaultLanguage == '' && WCF::getLanguage()->getLanguageCode() == 'de-informal' && isset($this->licenseTexts['de'])) $this->defaultLanguage = 'de'; 
 			if (isset($this->licenseTexts['en'])) $this->defaultLanguage = 'en';
 		}
-
+		
 		$this->promptLicenseConfirmation();
-
+		
 		$itemInserts = '';
 		foreach ($this->licenseTexts as $languageCode => $licenseData) {
 			if (!empty($itemInserts)) $itemInserts .= ',';
@@ -80,19 +80,19 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 			VALUES ".$itemInserts;
 		WCF::getDB()->sendQuery($sql);
 	}
-
+	
 	/**
-	 * @see	 PackageInstallationPlugin::hasUpdate()
+	 * @see	PackageInstallationPlugin::hasUpdate()
 	 */
 	public function hasUpdate() {
-       		return false;
+		return false;
 	}
-
+	
 	/**
-	 * @see	 PackageInstallationPlugin::update()
+	 * @see	PackageInstallationPlugin::update()
 	 */
 	public function update() {}
-
+	
 	/**
 	 * Prompts for license confirmation
 	 *
@@ -115,7 +115,7 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 				$errorType = 'missingAcception';
 			}
 		}
-
+		
 		$availableLanguages = array();
 		foreach ($this->licenseTexts as $langCode => $value) {
 			if ($languageCode == '') $languageCode = $langCode;
@@ -124,7 +124,7 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 		
 		$licenseText = $this->licenseTexts[$languageCode]['licenseText'];
 		if (CHARSET != 'UTF-8') $licenseText = StringUtil::convertEncoding('UTF-8', CHARSET, $licenseText);
-
+		
 		WCF::getTPL()->assign(array(
 			'licenseText' => $licenseText,
 			'languageCode' => $languageCode,
@@ -134,7 +134,7 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 		WCF::getTPL()->display('packageInstallationShowLicenseText');
 		exit;
 	}
-
+	
 	/**
 	 * loads the installed languages in an array
 	 *
@@ -144,14 +144,14 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 			$this->installedLanguages[$languageCode] = $languageID;
 		}
 	}
-
+	
 	/**
 	 * Extracts the licensetext file and returns it's
-     * content. If the specified licensetext file
+	 * content. If the specified licensetext file
 	 * was not found, an error message is thrown.
 	 *
-	 * @param	string				$licensetxtfile
-	 * @return 	string				licensetext
+	 * @param	string	$licensetxtfile
+	 * @return 	string	licensetext
 	 */
 	protected function readLicenseText($licensetxtfile) {
 		// No <licensetexts>-tag in the instructions in package.xml
@@ -163,7 +163,7 @@ class ShowLicensePackageInstallationPlugin extends AbstractPackageInstallationPl
 		if (($fileIndex = $this->installation->getArchive()->getTar()->getIndexByFilename($licensetxtfile['cdata'])) === false) {
 			throw new SystemException("license text file '".($licensetxtfile['cdata'])."' not found.", 0);
 		}
-
+		
 		$licensetext = $this->installation->getArchive()->getTar()->extractToString($fileIndex);
 		return $licensetext;
 	}

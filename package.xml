@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
-<package name="com.woltlab.community.roul.pip.showlicense" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com/XSD/package.xsd">
+<package name="com.woltlab.community.roul.pip.showlicense" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/package.xsd">
 	<packageinformation>
 		<packagename>Show License</packagename>
 		<packagedescription>This plugin adds the ability to show licenseinformations while the installation of packages.</packagedescription>
 		<isunique>1</isunique>
-		<version>1.1.0 Beta 1</version>
+		<version>1.1.0</version>
 		<date>2009-06-03</date>
 		<plugin>com.woltlab.wcf</plugin>
-		<unique>1</unique>
 	</packageinformation>
 	
 	<authorinformation>
-		<author>RouL's Coding Corner</author>
-		<authorURL>http://community.woltlab.com/db/index.php?page=User&amp;userID=18184</authorURL>
+		<author>Markus Bartz</author>
+		<authorurl>http://codingcorner.info/</authorurl>
 	</authorinformation>
 	
 	<requiredpackages>
-		<requiredPackage minversion="1.1.0 Beta 1">com.woltlab.wcf</requiredPackage>
+		<requiredpackage minversion="1.1.0 Beta 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	
 	<instructions type="install">
@@ -29,7 +28,12 @@
 		<packageinstallationplugins>pip.tar</packageinstallationplugins>
 		<acptemplates>acptemplates.tar</acptemplates>
 	</instructions>
+	
 	<instructions type="update" fromversion="1.0.1">
+		<files>files.tar</files>
+	</instructions>
+	
+	<instructions type="update" fromversion="1.1.0 Beta 1">
 		<files>files.tar</files>
 	</instructions>
 </package>
